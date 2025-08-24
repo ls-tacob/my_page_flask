@@ -1,12 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>my_page_flask</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Inicio</title>
+    <script>
+        window.onload = function () {
+            let nombre = prompt("¿Cuál es tu nombre?");
+            if (nombre) {
+                // Crear y enviar el formulario oculto
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/redirigir-usuario';
+
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'nombre';
+                input.value = nombre;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        };
+    </script>
 </head>
 <body>
-<h1>hello world!</h1>
-
+    <h2>Cargando...</h2>
 </body>
 </html>
