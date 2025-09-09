@@ -8,16 +8,19 @@
 <body>
     <header>
         <h1>Bienvenido a la app</h1>
+        {% if session.get('usuario') %}
+            <p>Hola, {{ session['usuario'] }}</p>
+        {% else %}
+            <a href="{{ url_for('login') }}">Iniciar sesión</a>
+        {% endif %}
     </header>
 
-    {% if nombre %}
+    {% if session.get('usuario') %}
     <nav>
         <ul>
-            <li><a href="{{ url_for('usuario', nombre=nombre) }}">Inicio</a></li>
-            <li><a href="{{ url_for('about', nombre=nombre) }}">Acerca</a></li>
-            <li><a href="{{ url_for('contacto', nombre=nombre) }}">Contacto</a></li>
-            <li><a href="{{ url_for('producto', nombre=nombre) }}">Productos</a></li>
-
+            <li><a href="{{ url_for('about') }}">Acerca</a></li>
+            <li><a href="{{ url_for('contacto') }}">Contacto</a></li>
+            <li><a href="{{ url_for('producto') }}">Productos</a></li>
         </ul>
     </nav>
     {% endif %}

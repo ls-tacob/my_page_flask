@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block content %}
+    <h2>Acceso institucional</h2>
+    <form method="post">
+        <label for="usuario">Usuario:</label>
+        <input type="text" name="usuario" id="usuario" required>
+
+        <label for="password">Contraseña:</label>
+        <input type="password" name="password" id="password" required>
+
+        <button type="submit">Entrar</button>
+    </form>
+{% endblock %}
