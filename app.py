@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, render_template, request, redirect, url_for
 
-from my_page_flask.forms import ProductForm
+from forms import ProductForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-cambialo-por-favor')
@@ -12,10 +12,14 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-cambialo-por
 def home():
     return render_template('index.html')
 
-@app.route('/redirigir-usuario', methods=['POST'])
-def usuario_redirect():
-    nombre = request.form['nombre']
-    return redirect(url_for('usuario', nombre=nombre))
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Aquí irá la lógica de autenticación
+        usuario = request.form['usuario']
+        password = request.form['password']
+        # Validar usuario y contraseña
+
 
 @app.route('/usuario/<string:nombre>')
 def usuario(nombre):

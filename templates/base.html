@@ -13,6 +13,9 @@
     {% if nombre %}
     <nav>
         <ul>
+<!-- index.html -->
+<button onclick="window.location.href='/login'">Iniciar sesión</button>
+
             <li><a href="{{ url_for('usuario', nombre=nombre) }}">Inicio</a></li>
             <li><a href="{{ url_for('about', nombre=nombre) }}">Acerca</a></li>
             <li><a href="{{ url_for('contacto', nombre=nombre) }}">Contacto</a></li>
