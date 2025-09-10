@@ -10,8 +10,6 @@
         <h1>Bienvenido a la app</h1>
         {% if session.get('usuario') %}
             <p>Hola, {{ session['usuario'] }}</p>
-        {% else %}
-            <a href="{{ url_for('login') }}">Iniciar sesión</a>
         {% endif %}
     </header>
 
@@ -23,8 +21,10 @@
             <li><a href="{{ url_for('producto') }}">Productos</a></li>
         </ul>
     </nav>
+    <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+{% else %}
+    <a href="{{ url_for('login') }}">Iniciar sesión</a>
     {% endif %}
-
     <main>
         {% block content %}{% endblock %}
     </main>
