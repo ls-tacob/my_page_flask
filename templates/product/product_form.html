@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+
+
+{% block title %}Registrar Producto{% endblock %}
+
+{% block content %}
+    <h2>Ingrese un producto al inventario</h2>
+<div class="product-form">
+
+{{ render_form(product_form) }}
+</div>
+
+{% endblock %}
