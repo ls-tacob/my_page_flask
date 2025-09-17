@@ -24,6 +24,9 @@
     <a href="{{ url_for('logout') }}">Cerrar sesión</a>
 {% else %}
     <a href="{{ url_for('login') }}">Iniciar sesión</a>
+    <br>
+    <a href="{{ url_for('register') }}">Crear Cuenta</a>
+
     {% endif %}
     <main>
         {% block content %}{% endblock %}

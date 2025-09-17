@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+
+
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block content %}
+    <h2>Acceso institucional</h2>
+<div class="register-form">
+
+{{ render_form(register_form) }}
+</div>
+
+{% endblock %}
