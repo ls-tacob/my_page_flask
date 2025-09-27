@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Editar Usuario{% endblock %}
+{% block content %}
+<div class="container my-5">
+  <h2 class="h4 fw-semibold text-primary mb-4">Editar usuario</h2>
+
+  <form method="POST" class="row g-3">
+    {{ form.hidden_tag() }}
+
+    <div class="col-md-6">
+      <label class="form-label">Nombres</label>
+      {{ form.nombres(class="form-control") }}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Apellidos</label>
+      {{ form.apellidos(class="form-control") }}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Email</label>
+      {{ form.email(class="form-control") }}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Estado</label>
+      {{ form.activo(class="form-select") }}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Rol</label>
+      {{ form.id_rol(class="form-select") }}
+    </div>
+
+    <div class="col-12 text-end mt-4">
+      <button type="submit" class="btn btn-primary">Guardar cambios</button>
+      <a href="{{ url_for('vista_usuarios') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

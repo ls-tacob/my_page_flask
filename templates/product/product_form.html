@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+
+
+{% block title %}Registrar Producto{% endblock %}
+
+{% block content %}
+{% if session['usuario']['id_rol'] in [1, 2] %}
+<h2>Ingrese un producto al inventario</h2>
+<div class="product-form">
+
+{{ render_form(form) }}
+</div>
+{%else%}
+<h2>Nuestros clientes no tienen los permisos para ingresar productos.</h2>
+{% endif %}
+{% endblock %}

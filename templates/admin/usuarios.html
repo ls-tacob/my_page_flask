@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block content %}
+{% if session['usuario']['id_rol'] in [1, 2] %}
+
+
+<div class="container my-5">
+  <h2 class="h4 fw-semibold text-primary mb-4">Usuarios registrados</h2>
+
+  {% set por_pagina = 6 %}
+{% set pagina_actual = request.args.get('pagina', 1) | int %}
+    {% set inicio = (pagina_actual - 1) * por_pagina %}
+  {% set fin = inicio + por_pagina %}
+  {% set usuarios_paginados = usuarios[inicio:fin] %}
+  {% set total_paginas = (usuarios|length + por_pagina - 1) // por_pagina %}
+
+  <div class="table-responsive rounded shadow-sm border">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light text-uppercase small text-muted">
+        <tr>
+          <th scope="col" class="text-center">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellido</th>
+          <th scope="col">Email</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Rol</th>
+          <th scope="col" class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for usuario in usuarios_paginados %}
+        <tr>
+          <td class="text-center">{{ loop.index0 + inicio + 1 }}</td>
+          <td>{{ usuario.nombres }}</td>
+          <td>{{ usuario.apellidos }}</td>
+          <td>{{ usuario.email }}</td>
+          <td>
+            <span class="badge
+              {% if usuario.isActive == 'ACTIVO' %}
+                bg-success
+              {% else %}
+                bg-secondary
+              {% endif %}
+            ">
+              {{ usuario.isActive }}
+            </span>
+          </td>
+          <td>{{ usuario.rol }}</td>
+          <td class="text-center">
+            <a href="{{ url_for('vista_editar_usuario', id=usuario.id_usuario) }}" class="btn btn-sm btn-outline-primary me-2">
+              Editar
+            </a>
+
+            <a href="{{ url_for('vista_editar_usuario', id=usuario.id_usuario) }}" class="btn btn-sm btn-outline-primary me-2">
+              Eliminar
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación institucional -->
+  <nav aria-label="Paginación de usuarios" class="mt-4">
+    <ul class="pagination justify-content-center">
+      {% for num in range(1, total_paginas + 1) %}
+      <li class="page-item {% if num == pagina_actual %}active{% endif %}">
+        <a class="page-link" href="{{ url_for('vista_usuarios', pagina=num) }}">{{ num }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+</div>
+{%else%}
+<h2>No tienes los permisos para ingresar productos.</h2>
+{% endif %}
+{% endblock %}
