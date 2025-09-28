@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Comprar productos{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h2 class="h4 fw-semibold text-primary mb-2">
+    Bienvenido, {{ usuario.name }} {{ usuario.last_name }}
+  </h2>
+  <p class="text-muted mb-4">
+    Este es tu espacio personalizado para adquirir nuestros productos. Explora el catálogo, revisa los detalles y elige lo que necesites.
+  </p>
+
+  <h3 class="h5 fw-semibold text-primary mb-4">Catálogo de productos</h3>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for producto in productos %}
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0">
+        <img src="{{ url_for('static', filename='uploads/producto/' ~ producto.imagen) }}"
+             class="card-img-top"
+             alt="Imagen de {{ producto.nombre }}"
+             style="object-fit: cover; height: 200px;">
+
+        <div class="card-body">
+          <h5 class="card-title text-primary fw-semibold">{{ producto.nombre }}</h5>
+          <p class="card-text text-muted small">{{ producto.descripcion }}</p>
+
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <span class="fw-bold text-success">${{ '%.2f'|format(producto.precio) }}</span>
+            <span class="badge {% if producto.stock > 0 %}bg-success{% else %}bg-danger{% endif %}">
+              Stock: {{ producto.stock }}
+            </span>
+          </div>
+        </div>
+
+        <div class="card-footer bg-white border-0 d-flex justify-content-between">
+          <button class="btn btn-sm btn-outline-primary">Agregar al carrito</button>
+          <button class="btn btn-sm btn-success">Comprar ahora</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if productos|length == 0 %}
+    <div class="alert alert-info mt-5 text-center">
+      No hay productos disponibles en este momento.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

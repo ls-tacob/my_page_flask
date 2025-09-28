@@ -11,6 +11,9 @@
 <div class="product-form">
 
 {{ render_form(form) }}
+        <div class="mt-4">
+      <a href="{{ url_for('vista_productos') }}" class="btn btn-secondary ms-2">Cancelar</a>
+    </div>
 </div>
 {%else%}
 <h2>Nuestros clientes no tienen los permisos para ingresar productos.</h2>

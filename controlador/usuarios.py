@@ -1,8 +1,10 @@
-from flask import flash, redirect, url_for
+from flask import flash, redirect, url_for, request
 
-from my_page_flask.controladorGlobal import listar_registros_sql, procesar_update_sql
+from my_page_flask.controladorGlobal import listar_registros_sql, procesar_update_sql, procesar_delete_sql
 from my_page_flask.bd import obtener_conexion
 from my_page_flask.forms.usuarios import UsuarioForm
+from datetime import datetime
+
 
 
 def listar_usuarios(template_path):
@@ -13,12 +15,16 @@ def listar_usuarios(template_path):
                ro.descripcion AS rol
         FROM usuarios us
         LEFT JOIN roles ro ON us.id_rol = ro.id_rol
+        WHERE us.delete_at IS NULL
     """
     return listar_registros_sql(
         sql_select=sql,
         template_path=template_path,
         context_name='usuarios'
     )
+
+
+
 
 
 
@@ -37,14 +43,15 @@ def editar_usuario(id, template_path):
         cursor.execute("""
             SELECT nombres, apellidos, email, activo, id_rol
             FROM usuarios
-            WHERE id_usuario = %s
+            WHERE id_usuario = %s and delete_at IS NULL
         """, (id,))
         resultado = cursor.fetchone()
 
         if not resultado:
-            flash('Usuario no encontrado')
+            flash('Usuario no encontrado', 'danger')  # ❌ Categoría compatible con Bootstrap
             return redirect(url_for('vista_usuarios'))
 
+        flash(f'Estás editando al usuario: {resultado["nombres"]} {resultado["apellidos"]}', 'info')  # ℹ️ Alerta institucional
         return {
             'nombres': resultado['nombres'],
             'apellidos': resultado['apellidos'],
@@ -55,17 +62,34 @@ def editar_usuario(id, template_path):
 
     sql_update = """
         UPDATE usuarios
-        SET nombres = %s, apellidos = %s, email = %s, activo = %s, id_rol = %s
+        SET nombres = %s, apellidos = %s, email = %s, activo = %s, id_rol = %s, date = %s, ip = %s
         WHERE id_usuario = %s
     """
 
+    extras = {
+        'date': datetime.now(),
+        'ip': request.remote_addr,
+        'id_usuario': id
+    }
+
     return procesar_update_sql(
-        form_class=lambda: form,  # para reutilizar el form con roles cargados
+        form_class=lambda: form,
         sql_update=sql_update,
         campos_formulario=['nombres', 'apellidos', 'email', 'activo', 'id_rol'],
         obtener_datos_existentes=obtener_datos_existentes,
         template_path=template_path,
         redirect_endpoint='vista_usuarios',
-        extras={'id_usuario': id}
+        extras=extras
     )
 
+def eliminar_usuario(id):
+    sql_delete = "UPDATE usuarios SET delete_at = %s, date = %s, ip = %s WHERE id_usuario = %s"
+    extras = {
+              'date': datetime.now(),
+              'ip': request.remote_addr,'id_usuario': id
+              }
+    return procesar_delete_sql(
+        sql_delete=sql_delete,
+        redirect_endpoint='vista_usuarios',
+        extras=extras
+    )

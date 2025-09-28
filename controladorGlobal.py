@@ -72,7 +72,8 @@ def procesar_update_sql(
     redirect_endpoint,
     extras=None,
     post_update_callback=None,
-    context_name='form'
+    context_name='form',
+    context_extra=None  # 👈 nuevo parámetro
 ):
     form = form_class()
 
@@ -107,14 +108,19 @@ def procesar_update_sql(
     for campo in campos_formulario:
         setattr(getattr(form, campo), 'data', datos_existentes.get(campo))
 
-    return render_template(template_path, **{context_name: form})
+    return render_template(template_path, **{
+        context_name: form,
+        **(context_extra or {})
+    })
 
 def procesar_delete_sql(sql_delete, redirect_endpoint, extras=None, post_delete_callback=None):
     try:
         conexion = obtener_conexion()
         cursor = conexion.cursor()
 
-        datos = list(extras.values()) if extras else []
+        # Agregar marca de tiempo actual como delete_at
+        delete_at = datetime.now()
+        datos = [delete_at] + list(extras.values()) if extras else [delete_at]
 
         cursor.execute(sql_delete, tuple(datos))
 
@@ -124,10 +130,10 @@ def procesar_delete_sql(sql_delete, redirect_endpoint, extras=None, post_delete_
         conexion.commit()
         conexion.close()
 
-        flash('Eliminación exitosa')
+        flash('Usuario marcado como eliminado', 'success')  # ✅ Alerta institucional
         return redirect(url_for(redirect_endpoint))
 
     except Exception as e:
         print(f"❌ Error al eliminar: {e}")
-        flash('Ocurrió un error al eliminar')
+        flash('Ocurrió un error al eliminar el usuario', 'danger')  # ❌ Alerta institucional
         return redirect(url_for(redirect_endpoint))

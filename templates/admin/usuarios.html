@@ -51,9 +51,15 @@
               Editar
             </a>
 
-            <a href="{{ url_for('vista_editar_usuario', id=usuario.id_usuario) }}" class="btn btn-sm btn-outline-primary me-2">
-              Eliminar
-            </a>
+            <form action="{{ url_for('vista_eliminar_usuario', id=usuario.id_usuario) }}" method="post" class="d-inline" onsubmit="return confirmarEliminacion()">
+  <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+</form>
+
+<script>
+  function confirmarEliminacion() {
+    return confirm('¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.');
+  }
+</script>
           </td>
         </tr>
         {% endfor %}
