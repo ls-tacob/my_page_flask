@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmación de compra{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Confirmación de compra</h2>
+
+  {% if resumen %}
+    <table class="table table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Producto</th>
+          <th>Imagen</th>
+          <th>Precio unitario</th>
+          <th>Cantidad</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in resumen %}
+        <tr>
+          <td>{{ item.nombre }}</td>
+          <td>
+            <img src="{{ url_for('static', filename='uploads/producto/' ~ item.imagen) }}"
+                 alt="Imagen de {{ item.nombre }}"
+                 class="img-thumbnail"
+                 style="width: 64px; height: auto;">
+          </td>
+          <td>${{ '%.2f'|format(item.precio|float) }}</td>
+          <td>{{ item.cantidad }}</td>
+          <td>${{ '%.2f'|format(item.total|float) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot class="table-light">
+        <tr>
+          <th colspan="4" class="text-end">Subtotal</th>
+          <td>${{ '%.2f'|format(subtotal|float) }}</td>
+        </tr>
+        <tr>
+          <th colspan="4" class="text-end">IVA (12%)</th>
+          <td>${{ '%.2f'|format(iva|float) }}</td>
+        </tr>
+        <tr>
+          <th colspan="4" class="text-end">Total a pagar</th>
+          <td class="fw-bold">${{ '%.2f'|format(total|float) }}</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <form method="POST" action="{{ url_for('registrar_pedido_view') }}">
+      {{ form.hidden_tag() }}
+      <div class="mb-3">
+        {{ form.metodo_pago.label(class="form-label") }}
+        {{ form.metodo_pago(class="form-select") }}
+      </div>
+      <button type="submit" class="btn btn-primary">Finalizar compra</button>
+    </form>
+  {% else %}
+    <div class="alert alert-warning">Tu carrito está vacío.</div>
+  {% endif %}
+</div>
+{% endblock %}

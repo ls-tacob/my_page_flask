@@ -35,7 +35,7 @@ def registrar_usuario():
         """,
         campos_formulario=['name', 'last_name', 'email', 'cellphone'],
         template_path='users/register.html',
-        redirect_endpoint='usuario',
+        redirect_endpoint='tienda',
         extras=extras,
         post_insert_callback=lambda cursor, form, nuevo_id: session.update({
             'usuario': {
@@ -80,7 +80,7 @@ def procesar_login(request):
                         'id_rol': usuario['id_rol']
                     }
                     print("✅ Login exitoso:", session['usuario'])
-                    return redirect(url_for('usuario'))
+                    return redirect(url_for('tienda'))
                 else:
                     print("❌ Contraseña incorrecta")
             else:

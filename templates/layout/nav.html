@@ -5,19 +5,31 @@
     <div class="container-fluid">
       <span class="navbar-brand fw-bold text-secondary">Menú principal</span>
       <ul class="navbar-nav d-flex flex-row gap-3">
+
         <li class="nav-item">
-          <a class="nav-link text-primary fw-semibold" href="{{ url_for('about') }}">Acerca</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-primary fw-semibold" href="{{ url_for('contacto') }}">Contacto</a>
+          <a class="nav-link fw-semibold {% if request.endpoint == 'about' %}active text-dark{% else %}text-primary{% endif %}" href="{{ url_for('about') }}">Acerca</a>
         </li>
 
-          <li class="nav-item">
-          <a class="nav-link text-primary fw-semibold" href="{{ url_for('vista_productos') }}">Productos</a>
-        </li>
         <li class="nav-item">
-          <a class="nav-link text-primary fw-semibold" href="{{ url_for('vista_usuarios') }}">Usuarios</a>
+          <a class="nav-link fw-semibold {% if request.endpoint == 'contacto' %}active text-dark{% else %}text-primary{% endif %}" href="{{ url_for('contacto') }}">Contacto</a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link fw-semibold {% if request.endpoint == 'tienda' %}active text-dark{% else %}text-primary{% endif %}" href="{{ url_for('tienda') }}">Tienda</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link fw-semibold {% if request.endpoint == 'vista_productos' %}active text-dark{% else %}text-primary{% endif %}" href="{{ url_for('vista_productos') }}">Productos</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link fw-semibold {% if request.endpoint == 'vista_usuarios' %}active text-dark{% else %}text-primary{% endif %}" href="{{ url_for('vista_usuarios') }}">Usuarios</a>
+        </li>
+<li class="nav-item">
+  <a class="nav-link fw-semibold {% if request.endpoint == 'vista_carrito' %}active text-dark{% else %}text-primary{% endif %}" href="{{ url_for('vista_carrito') }}">
+    Carrito
+  </a>
+</li>
       </ul>
     </div>
   </nav>

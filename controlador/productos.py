@@ -140,3 +140,69 @@ def eliminar_producto(id):
         redirect_endpoint='vista_productos',
         extras=extras
     )
+
+def obtener_productos(origen):
+    """
+    Extrae productos desde sesión (carrito) o desde request (compra directa).
+    Retorna una lista de diccionarios con id_producto y cantidad.
+    """
+    productos = []
+
+    if origen == 'carrito':
+        carrito = session.get('carrito', {})
+        for id_producto, cantidad in carrito.items():
+            productos.append({
+                'id_producto': int(id_producto),
+                'cantidad': int(cantidad)
+            })
+    elif origen == 'directo':
+        id_producto = request.form.get('id_producto')
+        cantidad = request.form.get('cantidad', 1)
+        productos.append({
+            'id_producto': int(id_producto),
+            'cantidad': int(cantidad)
+        })
+
+    return productos
+
+
+def obtener_datos_producto(id_producto):
+    """
+    Retorna los datos de un producto específico como dict.
+    Compatible con cursor tipo DictCursor.
+    """
+    try:
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+
+        sql = """
+            SELECT id_producto, nombre, descripcion, precio, stock, imagen
+            FROM producto
+            WHERE delete_at IS NULL AND id_producto = %s
+        """
+        cursor.execute(sql, (id_producto,))
+        resultado = cursor.fetchone()
+        conexion.close()
+
+        if resultado is None:
+            raise ValueError(f"Producto con ID {id_producto} no encontrado")
+
+        return {
+            'id_producto': resultado['id_producto'],
+            'nombre': resultado['nombre'],
+            'descripcion': resultado['descripcion'],
+            'precio': resultado['precio'],
+            'stock': resultado['stock'],
+            'imagen': resultado['imagen']
+        }
+
+    except Exception as e:
+        print(f"❌ Error al obtener datos del producto {id_producto}: {type(e).__name__} → {e}")
+        return {
+            'id_producto': id_producto,
+            'nombre': 'Error',
+            'descripcion': '',
+            'precio': 0.00,
+            'stock': 0,
+            'imagen': ''
+        }

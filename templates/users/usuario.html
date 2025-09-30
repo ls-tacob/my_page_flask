@@ -34,8 +34,14 @@
         </div>
 
         <div class="card-footer bg-white border-0 d-flex justify-content-between">
-          <button class="btn btn-sm btn-outline-primary">Agregar al carrito</button>
-          <button class="btn btn-sm btn-success">Comprar ahora</button>
+          <form action="{{ url_for('agregar_al_carrito') }}" method="POST" class="d-inline">
+  <input type="hidden" name="id_producto" value="{{ producto.id_producto }}">
+  <input type="hidden" name="cantidad" value="1">
+  <button type="submit" class="btn btn-sm btn-outline-primary">Agregar al carrito</button>
+</form>
+          <a href="{{ url_for('comprar') }}?origen=directo&id_producto={{ producto.id_producto }}&cantidad=1&metodo_pago=efectivo" class="btn btn-sm btn-success">
+    Comprar ahora
+</a>
         </div>
       </div>
     </div>

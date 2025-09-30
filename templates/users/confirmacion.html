@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Pedido confirmado{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4 text-success">¡Pedido confirmado!</h2>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Resumen del pedido</h5>
+      <p><strong>Número de pedido:</strong> {{ pedido.id_pedido }}</p>
+      <p><strong>Fecha:</strong> {{ pedido.date.strftime('%d/%m/%Y %H:%M') }}</p>
+      <p><strong>Método de pago:</strong> {{ pedido.metodo_pago|capitalize }}</p>
+      <p><strong>Estado:</strong> {{ pedido.estado|capitalize }}</p>
+      <p><strong>Total pagado:</strong> ${{ '%.2f'|format(pedido.precio_final|float) }}</p>
+    </div>
+  </div>
+
+  <h5>Detalles del pedido</h5>
+  <table class="table table-bordered align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Precio unitario</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in detalles %}
+      <tr>
+        <td>{{ item.nombre_producto }}</td>
+        <td>{{ item.cantidad }}</td>
+        <td>${{ '%.2f'|format(item.precio_unitario|float) }}</td>
+        <td>${{ '%.2f'|format(item.total|float) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="{{ url_for('tienda') }}" class="btn btn-outline-primary mt-3">Volver a la tienda</a>
+</div>
+{% endblock %}
